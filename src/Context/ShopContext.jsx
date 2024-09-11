@@ -172,9 +172,11 @@ const ShopContextProvider =(props) => {
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({});
+    const [popup, setPopup] = useState({ isVisible: false, message: '' });
+    
     const navigate = useNavigate()
 
-    let deliveryFee = 30;
+    let deliveryFee = 20;
 
     const addToCart = async (itemId) => {
         let cartData = structuredClone(cartItems);
@@ -185,6 +187,7 @@ const ShopContextProvider =(props) => {
             cartData[itemId] = 1;
         }
         setCartItems(cartData)
+        showPopup('Item successfully added to cart!');
     }
 
     const getCartCount = () => {
@@ -204,7 +207,6 @@ const ShopContextProvider =(props) => {
 
     const updateQuantity = async (itemId, quantity) => {
         let cartData = structuredClone(cartItems);
-
         cartData[itemId] = quantity
         setCartItems(cartData)
     }
@@ -216,12 +218,17 @@ const ShopContextProvider =(props) => {
       }, 0);
     };
 
+    const showPopup = (message) => {
+      setPopup({ isVisible: true, message });
+      setTimeout(() => setPopup({ isVisible: false, message: '' }), 1000);
+    };
+  
 
     const value = {
         search, setSearch, showSearch, setShowSearch,
         addToCart, cartItems, deliveryFee,
         getCartCount, updateQuantity, getCartAmount,
-        navigate
+        navigate, popup, showPopup
     }
 
     return(

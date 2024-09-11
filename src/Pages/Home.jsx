@@ -4,6 +4,7 @@ import MobileHero from "../components/MobileHero"
 import Products from "../components/Products"
 import LatestCollection from "../components/LatestCollection"
 import OurPolicy from "../components/OurPolicy"
+import PopUp from "../components/PopUp"
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
        <LatestCollection />
        <Products />
        <OurPolicy />
+       <PopUp />
     </>
   )
 }

@@ -168,7 +168,7 @@ const products = [
 const Orders = () => {
     
   return (
-    <div className=" container border-t pt-16 font-openSans">
+    <div className=" container border-t pt-12 font-openSans">
         <div className="text-2xl">
             <Title text1={"MY"} text2={"ORDERS"}/>
         </div>

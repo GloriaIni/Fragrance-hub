@@ -171,7 +171,7 @@ const latests = [
 const LatestCollection = () => {
     
   return (
-    <div className="container my-9 grid place-items-center">
+    <div className="container mt-4 mb-9 grid place-items-center">
          <div className="text-center py-8 text-2xl md:text-3xl">
          <Title text1={'LATEST'} text2={'COLLECTIONS'}/>
          <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-ash"></p>

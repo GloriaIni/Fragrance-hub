@@ -17,9 +17,9 @@ const MobileNavbar = () => {
   return (
   <>
     <div className="sticky top-0 bg-white z-10">
-      <div className="container py-8 md:hidden">
+      <div className="container py-5 md:hidden">
          <div className="flex justify-between items-center">
-            <h1 className="text-[20px] font-bold font-inter">Fragrance hub</h1>
+           <Link to={"/"}> <h1 className="text-[20px] font-bold font-inter">Fragrance hub</h1></Link>
 
 
             <div className="flex gap-4 text-black">

@@ -171,10 +171,10 @@ const Products = () => {
   return (
     <>
     <div className="container grid place-items-center">
-         <div className="text-center py-8 text-2xl md:text-3xl">
+         <div className="text-center pt-8 pb-4 text-2xl md:text-3xl">
          <Title text1={'BEST'} text2={'SELLER'}/>
          </div>
-        <div className="grid grid-cols-2 md:grid-cols-4  gap-4 gap-y-6 ">
+        <div className="grid grid-cols-2 md:grid-cols-4  gap-2 md:gap-5 ">
             {products.slice(8,16).map((product, index) => (
                 <ProductCard 
                 key={index}

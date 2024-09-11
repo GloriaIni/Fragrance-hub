@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Title from '../components/Title'
 import contact from "/contact.jpg"
 
@@ -9,7 +10,7 @@ const ContactUs = () => {
         </div>
 
         <div className="my-10 flex flex-col justify-center  md:flex-row gap-10 mb-28">
-            <img className='w-full md:max-w-[480px] rounded-lg' src={contact} alt="" />
+            <LazyLoadImage effect='opacity' className='w-full md:max-w-[480px] rounded-lg' src={contact} alt="" />
 
             <div className="flex flex-col justify-center items-start gap-6 ">
                 <p className='font-semibold text-xl text-gray-600'>Our Store</p>

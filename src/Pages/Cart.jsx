@@ -3,6 +3,10 @@ import { ShopContext } from "../Context/ShopContext"
 import Title from "../components/Title"
 import { RiDeleteBin6Line } from "react-icons/ri";
 import CartTotal from "../components/CartTotal";
+import { FiMinus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { BsCartX } from "react-icons/bs";
 
 
 const products = [
@@ -188,7 +192,15 @@ useEffect(() => {
   
 },[cartItems])
 
-  return (
+
+const handleQuantityChange = (id, increment) => {
+  const newQuantity = cartItems[id] + increment;
+  if (newQuantity > 0) {
+    updateQuantity(id, newQuantity);
+  }
+};
+
+  return cartData.length !== 0? (
     <div className="container border-t pt-14 font-inter">
       <div className="text-2xl mb-3">
         <Title text1={"SHOPPING"} text2={"CART"} /> 
@@ -211,7 +223,11 @@ useEffect(() => {
                       </div>
                     </div>
                   </div>
-                  <input onChange={(e) => {e.target.value === "" || e.target.value === "0" ? null : updateQuantity(item.id, Number(e.target.value))}} className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1" type="number" name="number" min={1} defaultValue={item.quantity} />
+                  <div className="flex items-center gap-2 font-roboto">
+                  <FiMinus onClick={() => handleQuantityChange(item.id, -1)} className=" border border-gray-800 rounded-sm m-3" />
+                    {cartItems[item.id]}
+                   <FiPlus onClick={() => handleQuantityChange(item.id, +1)} className=" border border-gray-800 rounded-sm m-3"/>
+                  </div>
                   <RiDeleteBin6Line onClick={() => updateQuantity(item.id, 0)} size={18} className="mr-4 cursor-pointer text-pink"/>
                 </div>
               )   
@@ -230,7 +246,17 @@ useEffect(() => {
         </div>
       </div>
     </div> 
-  )
+  ) : <div className="container flex items-center justify-center flex-col mt-4 mb-7 gap-4 h-[70vh] text-center">
+        <div className="border-2 border-pink rounded-full">
+        <BsCartX size={40}  className="text-pink m-5"/>
+        </div>
+       
+      <div className="text-pink text-2xl sm:text-3xl font-roboto font-semibold ">
+        Your Cart is Currently Empty!
+      </div>
+      <p className="text-gray-300 font-medium">Looks like you haven't added anything to your cart yet. Start shopping to fill it up!</p>
+      <div><button className="text-white shadow-md bg-pink w-[150px] h-[48px] rounded-[15px] font-bold text-base grid place-items-center"><Link to={"./product"}>Shop now</Link></button></div>
+  </div>
 }
 
 export default Cart

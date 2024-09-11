@@ -1,86 +1,96 @@
-import { useNavigate } from "react-router-dom"
 import PlaceOrderNav from "./PlaceOrderNav"
-import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { RiErrorWarningFill } from "react-icons/ri";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+
+const schema = z.object({
+  fullname: z.string().min(1, "Name must not be empty").max(30, "Name must not exceed 30 characters").regex(/^[A-Za-z\s\-]+$/, 'Name can only contain letters, spaces, and hyphens' ),
+  email: z.string().email(),
+  number: z.string().regex(/^\+?\d{10,15}$/, "Phone number is invalid!")
+})
 
 
 const Information = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    number: ''
-  });
-
-  // check validity
-  const [isFormValid, setIsFormValid] = useState(false);
-
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const navigate = useNavigate()
+  const {register, 
+    handleSubmit,
+    setError,
+    formState: {errors, isSubmitting}
+} = useForm({
+   defaultValues: {
+       fullname: "",
+       email: "",
+       number: ""
+   },
+   resolver: zodResolver(schema)
+})
 
-  
-  useEffect(() => {
-    const { fullname, email, number } = formData;
-
-    // Simple validation: check if all fields are non-empty
-    setIsFormValid(fullname.trim() !== '' && email.trim() !== '' && number.trim() !== '');
-  }, [formData]);
-
-
-  const updateSubmit = async (event) => {
-    event.preventDefault()
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    navigate("/address")
-  };
+const onSubmit = async (data) => {
+  try {
+   await new Promise((resolve) => setTimeout(resolve, 3000));
+   navigate("/address")
+   
+  } catch (error) {
+   setError("root", {
+       message: "This email is already taken"
+   })
+  }  
+}
 
   return (
     <>
       <PlaceOrderNav />
-      <div className="font-openSans w-full sm:w-[600px] container my-10 gap-4">
-          <form onSubmit={updateSubmit} >
-            <div className="flex flex-col gap-2 my-6">
-              <label htmlFor="fullname" className="">Full name</label>
-              <input type="text"
-               name="fullname"  
-               id="fullname"
-               placeholder="Full name"
-               className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink" 
-               value={formData.fullname}
-               onChange={handleChange}
-               />
-            </div>
+      <div className="font-openSans w-full sm:w-[600px] container my-10 gap-7">
+          <form onSubmit={handleSubmit(onSubmit)} >
 
-            <div className="flex flex-col gap-2 my-6">
-              <label htmlFor="Email address" className="">Email address</label>
-              <input type="email" 
-              name="email" 
-              id="email"
-              placeholder="Email address" 
-              className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink" 
-              value={formData.email}
-              onChange={handleChange}
-               />
-            </div>
-
-            <div className="flex flex-col gap-2 my-6">
-              <label htmlFor="Phone number" className="">Phone number</label>
-               <input type="number" 
-                name="number"
-                id="number" 
-                placeholder="Phone number" 
+            {/* name field */}
+            <div className="relative flex flex-col gap-2 my-6 ">
+              <label htmlFor="fullname" className="">Full Name</label>
+              <input {...register("fullname")}
+                type="text"
+                placeholder="Full Name"
                 className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink" 
-                value={formData.number}
-                onChange={handleChange}
+               />
+                {errors.fullname && (<div className="absolute top-full left-0 mt-1 text-red-500 text-xs flex items-center gap-1 pl-3"><RiErrorWarningFill />{errors.fullname.message}</div>)}
+            </div>
+
+            <div className=" relative flex flex-col gap-2 my-6">
+              <label htmlFor="Email address" className="">Email Address</label>
+              <input {...register("email")}
+                type="email" 
+                placeholder="Email address" 
+                className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink" 
+               />
+                  {errors.email && (<div className="absolute top-full left-0 mt-1 text-red-500 text-xs flex items-center gap-1 pl-3"><RiErrorWarningFill />{errors.email.message}</div>)}
+            </div>
+
+            <div className="relative flex flex-col gap-2 my-6">
+              <label htmlFor="Phone number" className="">Phone Number</label>
+               <input {...register("number")}
+                 type="text" 
+                  placeholder="Phone number" 
+                  className="px-3.5 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink" 
+                  
                 />
+                   {errors.number && (<div className="absolute top-full left-0 mt-1 text-red-500 text-xs flex items-center gap-1 pl-3"><RiErrorWarningFill />{errors.number.message}</div>)}
             </div>
               
-              <button type="submit" 
-                 disabled={!isFormValid}
-                 className={`w-full text-sm my-8 px-8 py-2.5 rounded-[10px] font-bold shadow-md ${isFormValid? " bg-pink text-white cursor-pointer hover:bg-red-400" : "bg-gray-300 text-white cursor-not-allowed"}`}>Continue</button>
+              <button
+                type="submit" 
+                 className="w-full text-sm my-8 px-8 py-2.5 rounded-[10px] font-bold shadow-md bg-pink text-white cursor-pointer hover:bg-red-400"
+                 disabled={isSubmitting}
+                 > {isSubmitting ? 
+                  <div
+                    className="inline-block h-7 w-7 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status">
+                    <span
+                      className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                    >Loading...</span>
+                  </div> : "Continue"}
+               </button>
           </form>
       </div>
     </>
