@@ -119,7 +119,7 @@ useEffect(() => {
 
   const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 7000));
       setShowModal(true); 
     } catch (error) {
       setError("root", { message: "Submission error" });
